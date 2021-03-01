@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 if __name__ == "__main__":
-    dataDirectory = '..\images'
+    dataDirectory = 'images'
     list = [f for f in os.listdir(dataDirectory) if f.endswith('.jpg') or f.endswith('png')]
     for file in list:
         string = dataDirectory + '\\'+ file
