@@ -1,24 +1,28 @@
-import cv2 as cv
-import os
-import sys
-import matplotlib.pyplot as plt
+import cv2
 import numpy as np
 
-if __name__ == "__main__":
-    dataDirectory = 'images'
-    list = [f for f in os.listdir(dataDirectory) if f.endswith('.jpg') or f.endswith('png')]
-    for file in list:
-        string = dataDirectory + '\\'+ file
-        image = cv.imread(string)
-        cv.circle(image, (169, 12), 3, (255, 0, 0), -1)
-        cv.circle(image, (80, 232), 3, (0, 0, 255), -1)
-        plt.figure(figsize=(7, 7))
-        plt.imshow(image)
-        plt.show()
-        key = cv.waitKey(0) & 0xFF  # mask safer on windows 64
-    if key == 27:
-        cv.destroyAllWindows()
-    elif key == ord('s'):
-        cv.imwrite('maze', image)
-        cv.destroyAllWindows()
+filename = 'maze.png'
+img = cv2.imread(filename)
+gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 
+# find Harris corners
+gray = np.float32(gray)
+dst = cv2.cornerHarris(gray,2,3,0.04)
+dst = cv2.dilate(dst,None)
+ret, dst = cv2.threshold(dst,0.01*dst.max(),255,0)
+dst = np.uint8(dst)
+
+# find centroids
+ret, labels, stats, centroids = cv2.connectedComponentsWithStats(dst)
+
+# define the criteria to stop and refine the corners
+criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 100, 0.001)
+corners = cv2.cornerSubPix(gray,np.float32(centroids),(5,5),(-1,-1),criteria)
+
+# Now draw them
+res = np.hstack((centroids,corners))
+res = np.int0(res)
+img[res[:,1],res[:,0]]=[0,0,255]
+img[res[:,3],res[:,2]] = [0,255,0]
+
+cv2.imwrite('subpixel5.png',img)
