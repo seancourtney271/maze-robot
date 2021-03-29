@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-filename = 'maze.png' #Thats a cool picture
+filename = './maze-solver/images/maze.png' #Thats a cool picture
 img = cv2.imread(filename)
 gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 
@@ -17,7 +17,7 @@ ret, labels, stats, centroids = cv2.connectedComponentsWithStats(dst)
 
 # define the criteria to stop and refine the corners
 criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 100, 0.001)
-corners = cv2.cornerSubPix(gray,np.float32(centroids),(5,5),(-1,-1),criteria)
+#corners = cv2.cornerSubPix(gray,np.float32(centroids),(5,5),(-1,-1),criteria)
 
 # Now draw them
 res = np.hstack((centroids,corners))
