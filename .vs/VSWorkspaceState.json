@@ -1,8 +1,10 @@
 {
   "ExpandedNodes": [
     "",
+    "\\maze-solver",
+    "\\maze-solver\\images",
     "\\robot-controls"
   ],
-  "SelectedNode": "\\robot-controls\\drive.py",
+  "SelectedNode": "\\subpixel5.png",
   "PreviewInSolutionExplorer": false
 }
